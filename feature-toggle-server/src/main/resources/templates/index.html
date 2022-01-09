@@ -1,0 +1,32 @@
+<html xmlns="http://www.w3.org/1999/html">
+<head>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
+
+    <script
+            src="https://code.jquery.com/jquery-3.6.0.min.js"
+            integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+            crossorigin="anonymous"></script>
+</head>
+<body>
+
+<section class="section">
+    <h1 class="title">Feature Toggles</h1>
+
+    <nav class="level">
+        <div class="level-right">
+            <p class="level-item"><a class="button is-success" onclick="insertCreateToggle()">Создать Feature
+                Toggles</a></p>
+        </div>
+    </nav>
+
+    <div class="modal-message"></div>
+    <div class="place-create-toggle"></div>
+    <div class="container toggles"></div>
+
+    <script src="createToggle.js"></script>
+    <script src="utils.js"></script>
+    <script src="editToggle.js"></script>
+    <script src="listToggle.js"></script>
+</section>
+</body>
+</html>

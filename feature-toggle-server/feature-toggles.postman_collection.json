@@ -1,0 +1,347 @@
+{
+	"info": {
+		"_postman_id": "350484d1-8692-4e23-83a6-718d11536e27",
+		"name": "feature-toggles",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Получение всех движков условий",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/condition-engines",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"condition-engines"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Получение всех типов",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/feature-toggles/types",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"feature-toggles",
+						"types"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Создание feature-toggles",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"test-feature-toggle\",\r\n  \"enabled\": true,\r\n  \"startDate\": \"2021-01-01T12:00:00.000\",\r\n  \"endDate\": \"3000-01-01T12:00:00.000\",\r\n  \"description\": \"Тестовое описание\",\r\n  \"type\": \"OPERATIONAL\",\r\n  \"condition\": {\r\n    \"type\": \"EXPRESSION\",\r\n    \"language\": \"JAVA\",\r\n    \"parameters\": {\r\n      \"inputParameters\": [\r\n        {\r\n          \"name\": \"test\",\r\n          \"description\": \"Числовое значение\"\r\n        }\r\n      ]\r\n    },\r\n    \"condition\": {\r\n      \"body\": \"Integer.valueOf(test) > 12\"\r\n    }\r\n  }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/feature-toggles",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"feature-toggles"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Обновление feature-toggles",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"test-feature-toggle\",\r\n  \"enabled\": true,\r\n  \"startDate\": \"2021-01-01T12:00:00.000\",\r\n  \"endDate\": \"3001-01-01T12:00:00.000\",\r\n  \"description\": \"Обновлённое тестовое описание\",\r\n  \"type\": \"OPERATIONAL\",\r\n  \"condition\": {\r\n    \"type\": \"EXPRESSION\",\r\n    \"language\": \"JAVA\",\r\n    \"parameters\": {\r\n      \"inputParameters\": [\r\n        {\r\n          \"name\": \"test1\",\r\n          \"description\": \"Числовое значение\"\r\n        },\r\n        {\r\n          \"name\": \"test2\",\r\n          \"description\": \"Числовое значение\"\r\n        }\r\n      ]\r\n    },\r\n    \"condition\": {\r\n      \"body\": \"Integer.valueOf(test1) > Integer.valueOf(test2)\"\r\n    }\r\n  }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/feature-toggles/2bce64d4-9fd6-4cab-8b2a-2c5b626247be",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"feature-toggles",
+						"2bce64d4-9fd6-4cab-8b2a-2c5b626247be"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Получение всех feature-toggles",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/feature-toggles",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"feature-toggles"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Получение feature-toggle",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/feature-toggles/f30f563a-6d89-4f10-a816-4bcef855c700",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"feature-toggles",
+						"f30f563a-6d89-4f10-a816-4bcef855c700"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Удаление feature-toggles",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/feature-toggles/545608e2-d34a-4210-afd4-259a16243ed0",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"feature-toggles",
+						"545608e2-d34a-4210-afd4-259a16243ed0"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "EXP Тестирование условия feature-toggles",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"type\": \"EXPRESSION\",\r\n  \"language\": \"JAVA\",\r\n  \"parameters\": {\r\n    \"inputParameters\": [\r\n      {\r\n        \"name\": \"test\",\r\n        \"value\": \"5\"\r\n      }\r\n    ]\r\n  },\r\n  \"condition\": {\r\n      \"body\": \"Integer.parseInt(test) > 2\"\r\n  }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/condition-checker/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"condition-checker",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "SCRIPT Тестирование условия feature-toggles",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"type\": \"SCRIPT\",\r\n  \"language\": \"JAVA\",\r\n  \"parameters\": {\r\n    \"inputParameters\": [\r\n      {\r\n        \"name\": \"test\",\r\n        \"value\": \"5,3,4,2\"\r\n      },\r\n      {\r\n        \"name\": \"value\",\r\n        \"value\": \"100\"\r\n      }\r\n    ]\r\n  },\r\n  \"condition\": {\r\n      \"body\": \"import java.util.Arrays;\\n import java.util.List;\\n \\n static boolean calculate(String test, String value){\\n List<String> list = Arrays.asList(test.split(\\\",\\\"));\\n int sum = 0;\\n for (String v : list){\\n sum += Integer.parseInt(v);\\n }\\n return sum > Integer.parseInt(value);\\n }\\n \\n return calculate(test, value);\"\r\n  }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/condition-checker/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"condition-checker",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Проверка feature-toggle",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"type\": \"EXPRESSION\",\r\n  \"language\": \"JAVA\",\r\n  \"parameters\": {\r\n    \"inputParameters\": [\r\n      {\r\n        \"name\": \"test\",\r\n        \"value\": \"12\"\r\n      }\r\n    ]\r\n  },\r\n  \"condition\": {\r\n      \"body\": \"Integer.valueOf(test) > 2\"\r\n  }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/feature-toggles/test-feature-toggle/is-active/?test=10",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"feature-toggles",
+						"test-feature-toggle",
+						"is-active",
+						""
+					],
+					"query": [
+						{
+							"key": "test",
+							"value": "10"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Изменить состояние feature-toggle",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"type\": \"EXPRESSION\",\r\n  \"language\": \"JAVA\",\r\n  \"parameters\": {\r\n    \"inputParameters\": [\r\n      {\r\n        \"name\": \"test\",\r\n        \"value\": \"12\"\r\n      }\r\n    ]\r\n  },\r\n  \"condition\": {\r\n      \"body\": \"Integer.valueOf(test) > 2\"\r\n  }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/feature-toggles/365b8369-a54f-4b05-94f3-259e457bbe07/state",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"feature-toggles",
+						"365b8369-a54f-4b05-94f3-259e457bbe07",
+						"state"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

@@ -1,0 +1,6 @@
+springdoc:
+  version: '@springdoc.version@'
+  swagger-ui:
+    use-root-path: true
+    disable-swagger-default-url: true
+    url: /v3/api-docs

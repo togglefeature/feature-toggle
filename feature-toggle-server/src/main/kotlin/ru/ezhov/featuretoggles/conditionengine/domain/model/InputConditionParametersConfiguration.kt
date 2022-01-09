@@ -1,0 +1,3 @@
+package ru.ezhov.featuretoggles.conditionengine.domain.model
+
+class InputConditionParametersConfiguration(val parameters: List<InputConditionParameterConfiguration>)
