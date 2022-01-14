@@ -13,11 +13,7 @@ class FeatureTogglesServerApplication {
     fun customOpenAPI(): OpenAPI {
         return OpenAPI()
                 .info(Info().title("Feature Toggles API").version("1")
-                        .license(
-                                License()
-                                        .name("Apache 2.0")
-                                        .url("http://springdoc.org"))
-                )
+                        .license(License().name("Apache 2.0").url("http://springdoc.org")))
     }
 }
 

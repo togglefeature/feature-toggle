@@ -5,6 +5,7 @@ import org.springframework.stereotype.Repository
 import ru.ezhov.featuretoggles.featuretoggle.domain.FeatureToggleRepository
 import ru.ezhov.featuretoggles.featuretoggle.domain.FeatureToggleRepositoryException
 import ru.ezhov.featuretoggles.featuretoggle.domain.model.FeatureToggle
+import ru.ezhov.featuretoggles.featuretoggle.domain.model.FeatureToggleId
 
 @Repository
 class InMemoryFeatureToggleRepository : FeatureToggleRepository {
@@ -19,9 +20,9 @@ class InMemoryFeatureToggleRepository : FeatureToggleRepository {
     override fun byName(name: String): Either<FeatureToggleRepositoryException, FeatureToggle?> =
             Either.Right(map.values.firstOrNull { f -> f.name == name })
 
-    override fun save(featureToggle: FeatureToggle): Either<FeatureToggleRepositoryException, Unit> {
-        map[featureToggle.id] = featureToggle
-        return Either.Right(Unit)
+    override fun save(featureToggle: FeatureToggle): Either<FeatureToggleRepositoryException, FeatureToggleId> {
+        map[featureToggle.id.value] = featureToggle
+        return Either.Right(featureToggle.id)
     }
 
     override fun delete(id: String): Either<FeatureToggleRepositoryException, Unit> {

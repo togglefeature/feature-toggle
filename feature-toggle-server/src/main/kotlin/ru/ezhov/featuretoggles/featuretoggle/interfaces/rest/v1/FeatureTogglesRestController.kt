@@ -23,7 +23,9 @@ import ru.ezhov.featuretoggles.conditionengine.domain.model.InputConditionParame
 import ru.ezhov.featuretoggles.conditionengine.domain.model.InputConditionParameterConfiguration
 import ru.ezhov.featuretoggles.conditionengine.domain.model.InputConditionParameters
 import ru.ezhov.featuretoggles.conditionengine.domain.model.InputConditionParametersConfiguration
+import ru.ezhov.featuretoggles.featuretoggle.domain.CreateFeatureToggleServiceException
 import ru.ezhov.featuretoggles.featuretoggle.domain.FeatureToggleRepository
+import ru.ezhov.featuretoggles.featuretoggle.domain.FeatureToggleService
 import ru.ezhov.featuretoggles.featuretoggle.domain.model.FeatureToggle
 import ru.ezhov.featuretoggles.featuretoggle.domain.model.FeatureToggleDescription
 import ru.ezhov.featuretoggles.featuretoggle.domain.model.FeatureToggleInfo
@@ -57,7 +59,8 @@ import ru.ezhov.featuretoggles.featuretoggle.interfaces.rest.v1.model.NewFeature
 @RequestMapping(value = ["/api/"])
 class FeatureTogglesRestController(
         private val conditionEngineRepository: ConditionEngineRepository,
-        private val featureToggleRepository: FeatureToggleRepository
+        private val featureToggleRepository: FeatureToggleRepository,
+        private val featureToggleService: FeatureToggleService,
 ) {
     @RequestMapping(
             value = ["/v1/condition-engines"],
@@ -114,24 +117,21 @@ class FeatureTogglesRestController(
     @ResponseStatus(code = HttpStatus.CREATED)
     fun createFeatureToggle(@RequestBody new: NewFeatureToggleRequestDto): NewFeatureToggleIdResponseDto {
         val newToggle = new.toDomainModel()
-
-        if (newToggle.condition != null) {
-            conditionEngineRepository
-                    .by(newToggle.condition.type, newToggle.condition.language)
-                    .getOrHandle { ex ->
-                        throw ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, ex.message)
+                .getOrHandle { er -> throw ResponseStatusException(HttpStatus.BAD_REQUEST, er.message) }
+        return featureToggleService
+                .createNew(newToggle)
+                .map { id -> NewFeatureToggleIdResponseDto(id = id.value) }
+                .getOrHandle { ex ->
+                    throw when (ex) {
+                        is CreateFeatureToggleServiceException.Save, is CreateFeatureToggleServiceException.Search,
+                        is CreateFeatureToggleServiceException.SearchConditionEngine ->
+                            ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR)
+                        is CreateFeatureToggleServiceException.AlreadyExistsByName ->
+                            ResponseStatusException(HttpStatus.CONFLICT, "Already exists with name")
+                        is CreateFeatureToggleServiceException.NotFoundConditionEngine ->
+                            ResponseStatusException(HttpStatus.NOT_FOUND, "Condition not found")
                     }
-                    ?: throw ResponseStatusException(
-                            HttpStatus.NOT_FOUND,
-                            "Not found condition engine by type=${newToggle.condition.type} " +
-                                    "language=${newToggle.condition.language}"
-                    )
-        }
-        featureToggleRepository.save(FeatureToggle.from(newToggle)).getOrHandle { ex ->
-            throw ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, ex.message)
-        }
-
-        return NewFeatureToggleIdResponseDto(id = newToggle.id)
+                }
     }
 
     @RequestMapping(
@@ -225,7 +225,10 @@ class FeatureTogglesRestController(
             method = [RequestMethod.GET],
             produces = [MediaType.APPLICATION_JSON_VALUE],
     )
-    fun isEnable(@PathVariable("name") name: String, @RequestParam allParams: Map<String, String>): IsEnabledResponseDto {
+    fun isEnable(
+            @PathVariable("name") name: String,
+            @RequestParam allParams: Map<String, String>
+    ): IsEnabledResponseDto {
         val toggle = featureToggleRepository.byName(name).getOrHandle { ex ->
             throw ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, ex.message)
         } ?: throw ResponseStatusException(
@@ -285,7 +288,7 @@ class FeatureTogglesRestController(
 }
 
 private fun FeatureToggle.toApiModel() = FeatureToggleResponseDto(
-        id = this.id,
+        id = this.id.value,
         name = this.name,
         enabled = this.enabled,
         description = this.description.value,
@@ -301,7 +304,8 @@ private fun FeatureToggle.toApiModel() = FeatureToggleResponseDto(
                                 val pars = par.parameters.map { p ->
                                     InputConditionParameterConfigurationResponseDto(
                                             name = p.name,
-                                            description = p.description
+                                            description = p.description,
+                                            value = p.testValue,
                                     )
                                 }
                                 InputConditionParametersConfigurationResponseDto(inputParameters = pars)
@@ -321,7 +325,7 @@ private fun ConditionEngineLanguage.toApiModel() = ConditionEngineLanguageReques
 
 private fun ConditionEngineDescription.toApiModel() = ConditionEngineDescriptionRequestDto(value = this.value)
 
-private fun NewFeatureToggleRequestDto.toDomainModel() = NewFeatureToggle(
+private fun NewFeatureToggleRequestDto.toDomainModel() = NewFeatureToggle.of(
         name = this.name,
         enabled = this.enabled,
         startDate = this.startDate,
@@ -342,7 +346,8 @@ private fun ConditionEngineCheckerRequestDto.toDomainModel() = ConditionEnginePa
                                     .map { p ->
                                         InputConditionParameter(
                                                 name = p.name,
-                                                value = p.value)
+                                                value = p.value
+                                        )
                                     }
                     )
                 },
@@ -363,7 +368,9 @@ private fun ConditionEngineConfigurationRequestDto.toDomainModel(
                                     .map { p ->
                                         InputConditionParameterConfiguration(
                                                 name = p.name,
-                                                description = p.description)
+                                                description = p.description,
+                                                testValue = p.value,
+                                        )
                                     }
                     )
                 },
