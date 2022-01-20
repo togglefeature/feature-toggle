@@ -49,5 +49,7 @@ class FeatureToggle private constructor(
             condition = this.condition,
         )
 
-    fun isActive() = enabled && (endDate == null || endDate.isAfter(LocalDateTime.now()))
+    fun isActive() = enabled &&
+        (startDate == null || startDate.isBefore(LocalDateTime.now())) &&
+        (endDate == null || endDate.isAfter(LocalDateTime.now()))
 }
